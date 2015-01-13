@@ -4,7 +4,7 @@ import java.util.Date;
 import org.joda.time.DateTime;
 
 
-public final class Task {
+public class Task {
     private final long id;
     private final String description;
     private boolean done;
@@ -12,11 +12,7 @@ public final class Task {
     private final DateTime deadLine;
 
     public Task(long id, String description, boolean done) {
-        this.id = id;
-        this.description = description;
-        this.done = done;
-        this.date = new DateTime();
-        this.deadLine = null;
+    	this(id, description, done,null);
     }
     
     public Task(long id, String description, boolean done, DateTime pDeadLine) {
