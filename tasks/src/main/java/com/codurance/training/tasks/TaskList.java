@@ -9,14 +9,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.codurance.training.projects.Project;
+
 public final class TaskList implements Runnable {
     private static final String QUIT = "quit";
 
-    private final Map<String, List<Task>> tasks = new LinkedHashMap<>();
     private final BufferedReader in;
     private final PrintWriter out;
 
     private long lastId = 0;
+    private ArrayList<Project> listeProjet;
 
     public static void main(String[] args) throws Exception {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -24,22 +26,30 @@ public final class TaskList implements Runnable {
         new TaskList(in, out).run();
     }
 
-    public TaskList(BufferedReader reader, PrintWriter writer) {
+    public TaskList(BufferedReader reader, PrintWriter writer)
+    {
         this.in = reader;
         this.out = writer;
+        listeProjet = new ArrayList<Project>();
     }
 
-    public void run() {
-        while (true) {
+    public void run()
+    {
+        while (true) 
+        {
             out.print("> ");
             out.flush();
             String command;
-            try {
+            try 
+            {
                 command = in.readLine();
-            } catch (IOException e) {
+            } 
+            catch (IOException e)
+            {
                 throw new RuntimeException(e);
             }
-            if (command.equals(QUIT)) {
+            if (command.equals(QUIT))
+            {
                 break;
             }
             execute(command);
@@ -71,39 +81,62 @@ public final class TaskList implements Runnable {
         }
     }
 
-    private void show() {
-        for (Map.Entry<String, List<Task>> project : tasks.entrySet()) {
+    private void show() 
+    {
+        for (Map.Entry<String, List<Task>> project : tasks.entrySet())
+        {
             out.println(project.getKey());
-            for (Task task : project.getValue()) {
+            
+            for (Task task : project.getValue())
+            {
                 out.printf("    [%c] %d: %s%n", (task.isDone() ? 'x' : ' '), task.getId(), task.getDescription());
             }
             out.println();
         }
     }
 
-    private void add(String commandLine) {
+    private void add(String commandLine)
+    {
         String[] subcommandRest = commandLine.split(" ", 2);
         String subcommand = subcommandRest[0];
-        if (subcommand.equals("project")) {
+        
+        if (subcommand.equals("project"))
+        {
             addProject(subcommandRest[1]);
-        } else if (subcommand.equals("task")) {
+        } 
+        else if (subcommand.equals("task"))   
+        {
             String[] projectTask = subcommandRest[1].split(" ", 2);
             addTask(projectTask[0], projectTask[1]);
         }
     }
 
-    private void addProject(String name) {
-        tasks.put(name, new ArrayList<Task>());
+    private void addProject(String pName) 
+    {
+    	listeProjet.add(new Project(pName));
     }
 
-    private void addTask(String project, String description) {
-        List<Task> projectTasks = tasks.get(project);
-        if (projectTasks == null) {
-            out.printf("Could not find a project with the name \"%s\".", project);
+    private void addTask(String projectName, String description) 
+    {
+    	
+    	boolean exist = false;
+    	int i;
+    	
+    	for(i = 0; i < listeProjet.size(); i++)
+    	{
+    		if(listeProjet.get(i).getName().equals(projectName))
+    		{
+    			exist = true;
+    		}
+    	}
+    	
+        if (exist == false)
+        {
+            out.printf("Could not find a project with the name \"%s\".", projectName);
             out.println();
             return;
         }
-        projectTasks.add(new Task(nextId(), description, false));
+        listeProjet.get(i).getListTask().add(new Task(listeProjet.size()+1, description, false));
     }
 
     private void check(String idString) {
