@@ -3,18 +3,19 @@ package com.codurance.training.projects;
 import java.util.ArrayList;
 
 import com.codurance.training.tasks.Task;
+import com.codurance.training.tasks.TaskMultiple;
 
 public class Project 
 {
 	private final String name;
-	private ArrayList<Task> listTask;
-	private ArrayList<Task> listTaskDone;
+	private ArrayList<TaskMultiple> listTask;
+	private ArrayList<TaskMultiple> listTaskDone;
 	
 	public Project(String pName) 
 	{
 		this.name = pName;
-		this.listTask = new ArrayList<Task>();
-		this.listTaskDone = new ArrayList<Task>();
+		this.listTask = new ArrayList<TaskMultiple>();
+		this.listTaskDone = new ArrayList<TaskMultiple>();
 	}
 	
 	public String getName()
@@ -22,12 +23,12 @@ public class Project
 		return name;
 	}
 	
-	public ArrayList<Task> getListTask()
+	public ArrayList<TaskMultiple> getListTask()
 	{
 		return listTask;
 	}
 	
-	public ArrayList<Task> getListTaskDone()
+	public ArrayList<TaskMultiple> getListTaskDone()
 	{
 		return listTaskDone;
 	}

@@ -87,7 +87,7 @@ public final class TaskList implements Runnable {
     	{
     		for(int j = 0; j < listeProjet.get(i).getListTask().size(); j++)
     		{
-    			Task tache = listeProjet.get(i).getListTask().get(j);
+    			TaskMultiple tache = listeProjet.get(i).getListTask().get(j);
     			out.printf("    [%c] %d: %s%n", (tache.isDone() ? 'x' : ' '), tache.getId(), tache.getDescription());
     		}
     		
@@ -141,7 +141,7 @@ public final class TaskList implements Runnable {
             out.println();
             return;
         }
-        listeProjet.get(i).getListTask().add(new Task(this.nextId(), description, false));
+        listeProjet.get(i).getListTask().add(new TaskMultiple(this.nextId(), description, false));
     }
 
     private void check(String idString) {
@@ -161,7 +161,7 @@ public final class TaskList implements Runnable {
 	    	{
 	    		for(int j = 0; j < listeProjet.get(i).getListTask().size(); j++)
 	    		{
-	    			Task tache = listeProjet.get(i).getListTask().get(j);
+	    			TaskMultiple tache = listeProjet.get(i).getListTask().get(j);
 	    			if( tache.getId() == id )
 	    			{
 	    				tache.setDone(done);
@@ -171,7 +171,7 @@ public final class TaskList implements Runnable {
 	    		
 	    		for(int j = 0; j < listeProjet.get(i).getListTaskDone().size(); j++)
 	    		{
-	    			Task tache = listeProjet.get(i).getListTaskDone().get(j);
+	    			TaskMultiple tache = listeProjet.get(i).getListTaskDone().get(j);
 	    			
 	    			if( tache.getId() == id )
 	    			{
