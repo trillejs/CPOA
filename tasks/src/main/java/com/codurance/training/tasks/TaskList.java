@@ -82,17 +82,22 @@ public final class TaskList implements Runnable {
     }
 
     private void show() 
-    {
-        for (Map.Entry<String, List<Task>> project : tasks.entrySet())
-        {
-            out.println(project.getKey());
-            
-            for (Task task : project.getValue())
-            {
-                out.printf("    [%c] %d: %s%n", (task.isDone() ? 'x' : ' '), task.getId(), task.getDescription());
-            }
-            out.println();
-        }
+    {	
+    	for(int i = 0; i < listeProjet.size(); i++)
+    	{
+    		for(int j = 0; j < listeProjet.get(i).getListTask().size(); j++)
+    		{
+    			Task tache = listeProjet.get(i).getListTask().get(j);
+    			out.printf("    [%c] %d: %s%n", (tache.isDone() ? 'x' : ' '), tache.getId(), tache.getDescription());
+    		}
+    		
+    		for(int j = 0; j < listeProjet.get(i).getListTaskDone().size(); j++)
+    		{
+    			Task tache = listeProjet.get(i).getListTaskDone().get(j);
+    			out.printf("    [%c] %d: %s%n", (tache.isDone() ? 'x' : ' '), tache.getId(), tache.getDescription());
+    		}
+    		
+    	}
     }
 
     private void add(String commandLine)
@@ -136,32 +141,52 @@ public final class TaskList implements Runnable {
             out.println();
             return;
         }
-        listeProjet.get(i).getListTask().add(new Task(listeProjet.size()+1, description, false));
+        listeProjet.get(i).getListTask().add(new Task(this.nextId(), description, false));
     }
 
     private void check(String idString) {
         setDone(idString, true);
     }
 
-    private void uncheck(String idString) {
+    private void uncheck(String idString)
+    {
         setDone(idString, false);
     }
 
-    private void setDone(String idString, boolean done) {
+    private void setDone(String idString, boolean done)
+    {
         int id = Integer.parseInt(idString);
-        for (Map.Entry<String, List<Task>> project : tasks.entrySet()) {
-            for (Task task : project.getValue()) {
-                if (task.getId() == id) {
-                    task.setDone(done);
-                    return;
-                }
-            }
-        }
+        
+	        for(int i = 0; i < listeProjet.size(); i++)
+	    	{
+	    		for(int j = 0; j < listeProjet.get(i).getListTask().size(); j++)
+	    		{
+	    			Task tache = listeProjet.get(i).getListTask().get(j);
+	    			if( tache.getId() == id )
+	    			{
+	    				tache.setDone(done);
+	    				return;
+	    			}	
+	    		}
+	    		
+	    		for(int j = 0; j < listeProjet.get(i).getListTaskDone().size(); j++)
+	    		{
+	    			Task tache = listeProjet.get(i).getListTaskDone().get(j);
+	    			
+	    			if( tache.getId() == id )
+	    			{
+	    				tache.setDone(done);
+	    				return;
+	    			}
+	    		}
+	    		
+	    	}
         out.printf("Could not find a task with an ID of %d.", id);
         out.println();
     }
 
-    private void help() {
+    private void help() 
+    {
         out.println("Commands:");
         out.println("  show");
         out.println("  add project <project name>");
@@ -171,12 +196,14 @@ public final class TaskList implements Runnable {
         out.println();
     }
 
-    private void error(String command) {
+    private void error(String command) 
+    {
         out.printf("I don't know what the command \"%s\" is.", command);
         out.println();
     }
 
-    private long nextId() {
+    private long nextId()
+    {
         return ++lastId;
     }
 }
