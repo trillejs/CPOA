@@ -1,6 +1,7 @@
 package com.codurance.training.tasks;
 
 import java.util.ArrayList;
+import java.util.Observable;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeComparator;
@@ -58,6 +59,14 @@ public class TaskMultiple extends Task{
 			}
 			
 			
+		}
+		
+	}
+	
+	@Override
+	public void update(Observable obs, Object obj) {
+		if(obs instanceof Task){
+
 		}
 		
 	}
