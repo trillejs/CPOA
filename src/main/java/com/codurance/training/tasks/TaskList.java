@@ -9,6 +9,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.time.DateTime;
+
 import com.codurance.training.projects.Project;
 
 public final class TaskList implements Runnable {
@@ -56,22 +58,31 @@ public final class TaskList implements Runnable {
         }
     }
 
-    private void execute(String commandLine) {
+    private void execute(String commandLine)
+    {
         String[] commandRest = commandLine.split(" ", 2);
         String command = commandRest[0];
-        switch (command) {
+        switch (command) 
+        {
             case "show":
                 show();
                 break;
             case "add":
                 add(commandRest[1]);
                 break;
+            case "today":
+            	today();
+            	break;
             case "check":
                 check(commandRest[1]);
                 break;
             case "uncheck":
                 uncheck(commandRest[1]);
                 break;
+            case "view":
+            	if( commandRest[1].equals("by deadLine"));
+            		viewByDeadLine();
+            	break;
             case "help":
                 help();
                 break;
@@ -89,15 +100,43 @@ public final class TaskList implements Runnable {
     		{
     			TaskMultiple tache = listeProjet.get(i).getListTask().get(j);
     			out.printf("    [%c] %d: %s%n", (tache.isDone() ? 'x' : ' '), tache.getId(), tache.getDescription());
+    			out.println(" deadLine : " + tache.getDeadLine());
     		}
     		
     		for(int j = 0; j < listeProjet.get(i).getListTaskDone().size(); j++)
     		{
-    			Task tache = listeProjet.get(i).getListTaskDone().get(j);
+    			TaskMultiple tache = listeProjet.get(i).getListTaskDone().get(j);
     			out.printf("    [%c] %d: %s%n", (tache.isDone() ? 'x' : ' '), tache.getId(), tache.getDescription());
+    			out.println(" deadLine : " + tache.getDeadLine());
     		}
     		
     	}
+    }
+    
+    public void today()
+    {
+    	for(int i = 0; i < listeProjet.size(); i++)
+    	{	
+    		for(int j = 0; j < listeProjet.get(i).getListTask().size(); j++)
+    		{
+    			if(listeProjet.get(i).getListTask().get(j).getDeadLine() != null)
+    			{
+        			if( listeProjet.get(i).getListTask().get(j).getDeadLine().getDayOfWeek() == DateTime.now().getDayOfWeek() )
+        			{
+        				if(j == 0)
+        					out.println("Projet n° : " + listeProjet.get(i).getName());
+        				
+        				out.print(" tache : " + listeProjet.get(i).getListTask().get(j).getId());
+        				out.println(" | description : " + listeProjet.get(i).getListTask().get(j).getDescription());
+        			}
+    			}			
+    		}
+    	}
+    }
+    
+    public void viewByDeadLine()
+    {
+    	
     }
 
     private void add(String commandLine)
@@ -132,6 +171,7 @@ public final class TaskList implements Runnable {
     		if(listeProjet.get(i).getName().equals(projectName))
     		{
     			exist = true;
+    			listeProjet.get(i).getListTask().add(new TaskMultiple(this.nextId(), description, false));
     		}
     	}
     	
@@ -141,7 +181,7 @@ public final class TaskList implements Runnable {
             out.println();
             return;
         }
-        listeProjet.get(i).getListTask().add(new TaskMultiple(this.nextId(), description, false));
+        
     }
 
     private void check(String idString) {
@@ -193,8 +233,10 @@ public final class TaskList implements Runnable {
         out.println("  add task <project name> <task description>");
         out.println("  check <task ID>");
         out.println("  uncheck <task ID>");
+        out.println("  today");
+        out.println("  delete");
         out.println();
-    }
+    }	
 
     private void error(String command) 
     {

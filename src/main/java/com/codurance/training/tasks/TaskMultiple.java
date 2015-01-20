@@ -21,7 +21,7 @@ public class TaskMultiple extends Task{
 	public void addTask(Task pTask) throws Exception{
 		
 		if(this.sousTaches.contains(pTask))
-			throw new Exception("T‚che dÈj‡ prÈsente");
+			throw new Exception("Tache d√©j√† pr√©sente");
 		
 		else if(this.getDeadLine()==null){
 			
