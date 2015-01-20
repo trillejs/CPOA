@@ -1,11 +1,13 @@
 package com.codurance.training.projects;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 import com.codurance.training.tasks.Task;
 import com.codurance.training.tasks.TaskMultiple;
 
-public class Project 
+public class Project implements Observer 
 {
 	private final String name;
 	private ArrayList<TaskMultiple> listTask;
@@ -31,5 +33,19 @@ public class Project
 	public ArrayList<TaskMultiple> getListTaskDone()
 	{
 		return listTaskDone;
+	}
+
+	@Override
+	public void update(Observable obs, Object obj) {
+		if(obs instanceof Task){
+			if(((TaskMultiple) obs).isDone()){
+				listTask.remove(obs);
+				listTaskDone.add((TaskMultiple) obs);
+			}else{
+				listTaskDone.remove(obs);
+				listTask.add((TaskMultiple) obs);
+			}
+		}
+		
 	}
 }

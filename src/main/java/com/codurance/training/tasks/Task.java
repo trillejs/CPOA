@@ -1,10 +1,11 @@
 package com.codurance.training.tasks;
 import java.util.Date;
+import java.util.Observable;
 
 import org.joda.time.DateTime;
 
 
-public abstract class Task {
+public abstract class Task extends Observable {
     private final long id;
     private final String description;
     private boolean done;
@@ -45,6 +46,8 @@ public abstract class Task {
 
     public void setDone(boolean done) {
         this.done = done;
+		setChanged();
+		notifyObservers(this.done);
     }
     
     public void setDeadLine(DateTime pDeadLine){
