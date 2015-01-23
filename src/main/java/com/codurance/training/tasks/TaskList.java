@@ -10,38 +10,29 @@ import java.util.ArrayList;
 import org.joda.time.DateTime;
 
 import com.codurance.training.projects.Project;
-/**
+/**A la fois contrôleur et vue du programme. 
  * @author Jean-Sebastien TRILLE & Antoine RIVALIER
  *
  */
 public final class TaskList implements Runnable {
-	/**
-	 * 
-	 */
+	
+
 	private static final String QUIT = "quit";
 
-	/**
-	 * 
-	 */
 	private final BufferedReader in;
-	/**
-	 * 
-	 */
+
 	private final PrintWriter out;
 
 	/**
-	 * 
+	 * Liste des projets de l'application
 	 */
 	private ArrayList<Project> listeProjet;
+	
 	/**
-	 * 
+	 * Liste des tâches de l'application
 	 */
 	private ArrayList<TaskMultiple> listeTask;
 
-	/**
-	 * @param args
-	 * @throws Exception
-	 */
 	public static void main(String[] args) throws Exception {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		PrintWriter out = new PrintWriter(System.out);
@@ -49,7 +40,7 @@ public final class TaskList implements Runnable {
 
 	}
 
-	/**
+	/** Initialise les différents paramètres
 	 * @param reader
 	 * @param writer
 	 */
@@ -86,9 +77,6 @@ public final class TaskList implements Runnable {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Runnable#run()
-	 */
 	public void run()
 	{
 		while (true) 
@@ -112,7 +100,7 @@ public final class TaskList implements Runnable {
 		}
 	}
 
-	/**
+	/** Menu de l'application
 	 * @param commandLine
 	 */
 	private void execute(String commandLine)
@@ -146,7 +134,7 @@ public final class TaskList implements Runnable {
 			else if(commandRest[1].equals("by date"))
 				viewByDate();
 			else if(commandRest[1].equals("by project"))
-				show();
+				viewByProject();
 			break;
 		case "help":
 			help();
@@ -158,9 +146,9 @@ public final class TaskList implements Runnable {
 	}
 
 	/**
-	 * 
+	 * Affiche les Tâches par projet
 	 */
-	private void show() 
+	private void viewByProject() 
 	{	
 		for(Project p : this.listeProjet)
 		{
@@ -191,7 +179,7 @@ public final class TaskList implements Runnable {
 	}
 
 	/**
-	 * 
+	 * Affiche les tâches dont la deadLine correspond à aujourd'hui
 	 */
 	private void today()
 	{
@@ -213,9 +201,9 @@ public final class TaskList implements Runnable {
 		}
 	}
 
-	/**
-	 * @param pId
-	 * @param commandLine
+	/** Change la deadLine d'une tâche
+	 * @param pId - long, ID de la tâche
+	 * @param commandLine - String, date de la deadLine
 	 */
 	private void deadline(long pId, String commandLine)
 	{
@@ -242,7 +230,7 @@ public final class TaskList implements Runnable {
 	}
 
 	/**
-	 * 
+	 * Affiche les tâches par leurs dates de création
 	 */
 	private void viewByDate()
 	{
@@ -287,7 +275,7 @@ public final class TaskList implements Runnable {
 	}
 
 	/**
-	 * 
+	 * Affiche les tâches par deadLine
 	 */
 	private void viewByDeadLine()
 	{
@@ -331,8 +319,8 @@ public final class TaskList implements Runnable {
 		} 	
 	}
 
-	/**
-	 * @param id
+	/** Supprimme une tâche, de la liste des tâches, des projets et des sous-tâches
+	 * @param id - long, ID de la tâche à supprimer
 	 */
 	private void delete(long id)
 	{
@@ -359,8 +347,8 @@ public final class TaskList implements Runnable {
 	}
 
 
-	/**
-	 * @param commandLine
+	/** Appelle les différentes commandes add [...]
+	 * @param commandLine - String
 	 */
 	private void add(String commandLine)
 	{
@@ -388,26 +376,26 @@ public final class TaskList implements Runnable {
 		}
 	}
 
-	/**
-	 * @param pName
+	/** Ajoute un projet
+	 * @param pName - String, Nom du projet
 	 */
 	private void addProject(String pName) 
 	{
 		listeProjet.add(new Project(pName));
 	}
 
-	/**
-	 * @param id
-	 * @param description
+	/** Ajoute une tâche
+	 * @param id - long, ID de la tâche
+	 * @param description - String, Description de la tâche
 	 */
 	private void addTask(Long id, String description) 
 	{
 		listeTask.add(new TaskMultiple(id,description,false));
 	}
 
-	/**
-	 * @param id
-	 * @param id2
+	/** Ajoute une tâche à une autre tâche
+	 * @param id - long, tâche qui reçoit la sous-tâche
+	 * @param id2 - long, sous-tâche
 	 */
 	private void addTaskToTask(long id, long id2){
 
@@ -433,9 +421,9 @@ public final class TaskList implements Runnable {
 
 	}
 
-	/**
-	 * @param projectName
-	 * @param id
+	/** Ajoute une tâche à un projet
+	 * @param projectName - String, Nom du projet
+	 * @param id - long, ID de la tâche
 	 */
 	private void addTaskToProject(String projectName, Long id) 
 	{
@@ -469,25 +457,25 @@ public final class TaskList implements Runnable {
 
 	}
 
-	/**
-	 * @param idString
+	/** Appelle setDone avec le paramètre true
+	 * @param idString - String, ID de la TAsk
 	 */
 	private void check(String idString) 
 	{
 		setDone(idString, true);
 	}
 
-	/**
-	 * @param idString
+	/** Appelle setDone avec le paramètre false
+	 * @param idString - String, ID de la task
 	 */
 	private void uncheck(String idString)
 	{
 		setDone(idString, false);
 	}
 
-	/**
-	 * @param idString
-	 * @param done
+	/** Modifie l'état de la tâche dont l'ID est passée en paramètre
+	 * @param idString - String, ID de la task
+	 * @param done - boolean
 	 */
 	private void setDone(String idString, boolean done)
 	{
@@ -534,8 +522,8 @@ public final class TaskList implements Runnable {
 		out.println();
 	}	
 
-	/**
-	 * @param command
+	/** Est appelée quand la commande de l'utilisateur n'est pas comprise.
+	 * @param command - String
 	 */
 	private void error(String command) 
 	{

@@ -12,7 +12,7 @@ import org.joda.time.DateTimeComparator;
  *
  */
 public class TaskMultiple extends Task{
-	
+
 	/**
 	 * ArrayList de TaskMultiple
 	 */
@@ -26,7 +26,7 @@ public class TaskMultiple extends Task{
 	public TaskMultiple(long id, String description, boolean done) {
 		this(id, description, done,null);		
 	}
-	
+
 	/** Constructeur avec DeadLine, renvoie vers le constructeur de Task
 	 * @param id
 	 * @param description
@@ -44,29 +44,29 @@ public class TaskMultiple extends Task{
 	 * @throws Exception
 	 */
 	public void addTask(TaskMultiple pTask) throws Exception{
-		
+
 		if(this.sousTaches.contains(pTask))
 			throw new Exception("Tache déjà présente");
-		
+
 		else if(this.getDeadLine() == null){
-			
+
 			pTask.addObserver(this);
 			if(pTask.getDeadLine() == null)
-				
+
 				this.sousTaches.add(pTask);
-			
+
 			else{
-				
+
 				this.sousTaches.add(pTask);
 				this.setDeadLine(pTask.getDeadLine());
-				
+
 			}	
 		}else{
-			
+
 			pTask.addObserver(this);
 			if(pTask.getDeadLine() == null)				
 				this.sousTaches.add(pTask);
-			
+
 			else{
 				switch(DateTimeComparator.getInstance().compare(this.getDeadLine(), pTask.getDeadLine())){
 				case -1:
@@ -78,16 +78,16 @@ public class TaskMultiple extends Task{
 					break;
 				case 1:
 					this.sousTaches.add(pTask);
-					
+
 					break;					
-					
+
 				}						
 			}		
 		}		
 	}
-	
-	/**
-	 * @return
+
+	/**Accesseur de la liste de sous-tâches
+	 * @return sousTaches - ArrayList<TaskMultiple>
 	 */
 	public ArrayList<TaskMultiple> getSousTaches() {
 		return this.sousTaches;
@@ -103,7 +103,7 @@ public class TaskMultiple extends Task{
 				this.setDeadLineNoObserver(((Task) obs).getDeadLine());
 			}
 		}
-		
+
 	}
-	
+
 }
