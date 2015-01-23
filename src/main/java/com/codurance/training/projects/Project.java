@@ -34,6 +34,17 @@ public class Project implements Observer
 	{
 		return listTaskDone;
 	}
+	
+	public void addTask(TaskMultiple pTask)
+	{
+		pTask.addObserver(this);
+		if(pTask.isDone()){
+			listTaskDone.add(pTask);
+		}else{
+			listTask.add(pTask);
+		}
+		
+	}
 
 	@Override
 	public void update(Observable obs, Object obj) {

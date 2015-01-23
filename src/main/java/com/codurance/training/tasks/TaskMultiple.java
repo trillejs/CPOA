@@ -22,7 +22,7 @@ public class TaskMultiple extends Task{
 	public void addTask(Task pTask) throws Exception{
 		
 		if(this.sousTaches.contains(pTask))
-			throw new Exception("Tache d√©j√† pr√©sente");
+			throw new Exception("Tache dÈj‡† prÈsente");
 		
 		else if(this.getDeadLine()==null){
 			
@@ -36,9 +36,7 @@ public class TaskMultiple extends Task{
 				this.setDeadLine(pTask.getDeadLine());
 				
 			}	
-		}
-		else
-		{
+		}else{
 			
 			if(pTask.getDeadLine()==null)				
 				this.sousTaches.add(pTask);
@@ -47,13 +45,14 @@ public class TaskMultiple extends Task{
 				switch(DateTimeComparator.getInstance().compare(this.getDeadLine(), pTask.getDeadLine())){
 				case -1:
 					this.sousTaches.add(pTask);
+					this.setDeadLine(pTask.getDeadLine());
 					break;
 				case 0:
 					this.sousTaches.add(pTask);
 					break;
 				case 1:
 					this.sousTaches.add(pTask);
-					this.setDeadLine(pTask.getDeadLine());
+					
 					break;					
 					
 				}
@@ -65,11 +64,13 @@ public class TaskMultiple extends Task{
 		
 	}
 	
-	public void update(Observable obs, Object obj) 
-	{
-		if(obs instanceof Task)
-		{
-
+	@Override
+	public void update(Observable obs, Object obj) {
+		if(obs instanceof Task){
+			if(DateTimeComparator.getInstance().compare(this.getDeadLine(), ((Task) obs).getDeadLine())==-1){
+				this.setDeadLine(((Task) obs).getDeadLine());
+				
+			}
 		}
 		
 	}
