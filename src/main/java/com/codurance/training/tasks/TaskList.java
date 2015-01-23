@@ -15,14 +15,33 @@ import com.codurance.training.projects.Project;
  *
  */
 public final class TaskList implements Runnable {
+	/**
+	 * 
+	 */
 	private static final String QUIT = "quit";
 
+	/**
+	 * 
+	 */
 	private final BufferedReader in;
+	/**
+	 * 
+	 */
 	private final PrintWriter out;
 
+	/**
+	 * 
+	 */
 	private ArrayList<Project> listeProjet;
+	/**
+	 * 
+	 */
 	private ArrayList<TaskMultiple> listeTask;
 
+	/**
+	 * @param args
+	 * @throws Exception
+	 */
 	public static void main(String[] args) throws Exception {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		PrintWriter out = new PrintWriter(System.out);
@@ -30,6 +49,10 @@ public final class TaskList implements Runnable {
 
 	}
 
+	/**
+	 * @param reader
+	 * @param writer
+	 */
 	public TaskList(BufferedReader reader, PrintWriter writer)
 	{
 		this.in = reader;
@@ -63,6 +86,9 @@ public final class TaskList implements Runnable {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Runnable#run()
+	 */
 	public void run()
 	{
 		while (true) 
@@ -86,6 +112,9 @@ public final class TaskList implements Runnable {
 		}
 	}
 
+	/**
+	 * @param commandLine
+	 */
 	private void execute(String commandLine)
 	{
 		String[] commandRest = commandLine.split(" ", 2);
@@ -128,6 +157,9 @@ public final class TaskList implements Runnable {
 		}
 	}
 
+	/**
+	 * 
+	 */
 	private void show() 
 	{	
 		for(Project p : this.listeProjet)
@@ -158,6 +190,9 @@ public final class TaskList implements Runnable {
 		}
 	}
 
+	/**
+	 * 
+	 */
 	private void today()
 	{
 		for(Project p : this.listeProjet)
@@ -167,7 +202,7 @@ public final class TaskList implements Runnable {
 			{
 				if(tache.getDeadLine() != null)
 				{
-					if( tache.getDeadLine().getDayOfWeek() == DateTime.now().getDayOfWeek() )
+					if( tache.getDeadLine().getDayOfWeek()  ==  DateTime.now().getDayOfWeek() )
 					{
 
 						out.print(" tache : " + tache.getId());
@@ -178,6 +213,10 @@ public final class TaskList implements Runnable {
 		}
 	}
 
+	/**
+	 * @param pId
+	 * @param commandLine
+	 */
 	private void deadline(long pId, String commandLine)
 	{
 
@@ -189,7 +228,7 @@ public final class TaskList implements Runnable {
 		for(TaskMultiple t : listeTask)
 		{
 
-			if( t.getId() == pId )
+			if( t.getId()  ==  pId )
 			{
 				t.setDeadLine(deadLine);
 				exist = true;
@@ -198,10 +237,13 @@ public final class TaskList implements Runnable {
 
 		}
 
-		if( exist == false )
+		if( exist  ==  false )
 			out.println("Aucun projet ayant cet ID");
 	}
 
+	/**
+	 * 
+	 */
 	private void viewByDate()
 	{
 		ArrayList<TaskMultiple> listeDate = new ArrayList<TaskMultiple>();
@@ -216,7 +258,7 @@ public final class TaskList implements Runnable {
 				{
 					//On vérifie si la liste n'est pas vide avant de devoir comparer des DateTime
 
-					if( listeDate.size() == 0 )
+					if( listeDate.size()  ==  0 )
 						listeDate.add(task);
 					else
 					{
@@ -225,7 +267,7 @@ public final class TaskList implements Runnable {
 							listeDate.add(k, task);
 							k = 0;
 						}
-						else if( k - 1 == 0 )
+						else if( k - 1  ==  0 )
 							listeDate.add(k - 1, task);
 					}
 
@@ -244,6 +286,9 @@ public final class TaskList implements Runnable {
 		} 	
 	}
 
+	/**
+	 * 
+	 */
 	private void viewByDeadLine()
 	{
 		ArrayList<TaskMultiple> listeDeadLine = new ArrayList<TaskMultiple>();
@@ -258,7 +303,7 @@ public final class TaskList implements Runnable {
 				{
 					//On vérifie si la liste n'est pas vide avant de devoir comparer des DateTime
 
-					if( listeDeadLine.size() == 0 )
+					if( listeDeadLine.size()  ==  0 )
 						listeDeadLine.add(task);
 					else
 					{
@@ -267,7 +312,7 @@ public final class TaskList implements Runnable {
 							listeDeadLine.add(k, task);
 							k = 0;
 						}
-						else if( k - 1 == 0 )
+						else if( k - 1  ==  0 )
 							listeDeadLine.add(k - 1, task);
 					}
 
@@ -286,11 +331,14 @@ public final class TaskList implements Runnable {
 		} 	
 	}
 
+	/**
+	 * @param id
+	 */
 	private void delete(long id)
 	{
 		for(TaskMultiple task : this.listeTask){
 			for(TaskMultiple t : task.getSousTaches()){
-				if(t.getId()==id)
+				if(t.getId() == id)
 					task.getSousTaches().remove(t);
 				break;
 			}
@@ -298,7 +346,7 @@ public final class TaskList implements Runnable {
 		
 		for(TaskMultiple task : this.listeTask){
 
-			if(task.getId()==id)
+			if(task.getId() == id)
 			{
 				this.listeTask.remove(task);
 				for(Project p : this.listeProjet){
@@ -311,6 +359,9 @@ public final class TaskList implements Runnable {
 	}
 
 
+	/**
+	 * @param commandLine
+	 */
 	private void add(String commandLine)
 	{
 		String[] subcommandRest = commandLine.split(" ", 2);
@@ -337,29 +388,40 @@ public final class TaskList implements Runnable {
 		}
 	}
 
+	/**
+	 * @param pName
+	 */
 	private void addProject(String pName) 
 	{
 		listeProjet.add(new Project(pName));
 	}
 
+	/**
+	 * @param id
+	 * @param description
+	 */
 	private void addTask(Long id, String description) 
 	{
 		listeTask.add(new TaskMultiple(id,description,false));
 	}
 
+	/**
+	 * @param id
+	 * @param id2
+	 */
 	private void addTaskToTask(long id, long id2){
 
 		TaskMultiple t1=null;
 		TaskMultiple t2=null;
 
 		for(TaskMultiple t : this.listeTask){
-			if(t.getId()==id)
+			if(t.getId() == id)
 				t1=t;
-			else if(t.getId()==id2)
+			else if(t.getId() == id2)
 				t2=t;
 		}
 
-		if(t1==null || t2==null)
+		if(t1 == null || t2 == null)
 			System.out.println("Une de ces deux tâches n'existe pas.");
 		else{
 			try {
@@ -371,6 +433,10 @@ public final class TaskList implements Runnable {
 
 	}
 
+	/**
+	 * @param projectName
+	 * @param id
+	 */
 	private void addTaskToProject(String projectName, Long id) 
 	{
 
@@ -384,10 +450,10 @@ public final class TaskList implements Runnable {
 				exist = true;  	
 				TaskMultiple pTask=null;
 				for(TaskMultiple t : listeTask){
-					if(t.getId()==id)
+					if(t.getId() == id)
 						pTask=t;	   				
 				}
-				if(pTask==null)
+				if(pTask == null)
 					System.out.println("Could not find the task with id "+id);
 				else
 					listeProjet.get(i).addTask(pTask);
@@ -403,16 +469,26 @@ public final class TaskList implements Runnable {
 
 	}
 
+	/**
+	 * @param idString
+	 */
 	private void check(String idString) 
 	{
 		setDone(idString, true);
 	}
 
+	/**
+	 * @param idString
+	 */
 	private void uncheck(String idString)
 	{
 		setDone(idString, false);
 	}
 
+	/**
+	 * @param idString
+	 * @param done
+	 */
 	private void setDone(String idString, boolean done)
 	{
 		Long id = Long.parseLong(idString);
@@ -420,7 +496,7 @@ public final class TaskList implements Runnable {
 
 		for(TaskMultiple t : listeTask)
 		{
-			if(t.getId()==id){
+			if(t.getId() == id){
 				t.setDone(done);
 
 				//Si une tâche qui en contient d'autres est marquée comme finie, les tâches qu'elle contient doivent l'être aussi
@@ -437,6 +513,9 @@ public final class TaskList implements Runnable {
 		out.println();
 	}
 
+	/**
+	 * Affiche le menu d'aide
+	 */
 	private void help() 
 	{
 		out.println("Commands:");
@@ -455,6 +534,9 @@ public final class TaskList implements Runnable {
 		out.println();
 	}	
 
+	/**
+	 * @param command
+	 */
 	private void error(String command) 
 	{
 		out.printf("I don't know what the command \"%s\" is.", command);

@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package com.codurance.training.projects;
 
 import java.util.ArrayList;
@@ -8,29 +11,28 @@ import com.codurance.training.tasks.Task;
 import com.codurance.training.tasks.TaskMultiple;
 
 
-/** La classe Project regroupe des tâches et implémente l'interface Observer, elle est notifiée des changements de tâches
- * @author Jean-Sebastien TRILLE & Antoine RIVALIER
+/**
+ *  La classe Project regroupe des tâches et implémente l'interface Observer, elle est notifiée des changements de tâches.
  *
+ * @author Jean-Sebastien TRILLE & Antoine RIVALIER
  */
 public class Project implements Observer 
 {
 	
-	/**
-	 * 
-	 */
+	/** Le nom du projet. */
 	private final String name;
-	/**
-	 * 
-	 */
+	
+	/** La liste de tâches non finies. */
 	private ArrayList<TaskMultiple> listTask;
-	/**
-	 * 
-	 */
+	
+	/** La liste de tâches finies. */
 	private ArrayList<TaskMultiple> listTaskDone;
 	
 	
 	/**
-	 * @param pName
+	 * Constructeur du projet.
+	 *
+	 * @param pName - String
 	 */
 	public Project(String pName) 
 	{
@@ -41,7 +43,9 @@ public class Project implements Observer
 
 	
 	/**
-	 * @return
+	 * Retourne le nom du projet.
+	 *
+	 * @return  name
 	 */
 	public String getName()
 	{
@@ -49,7 +53,9 @@ public class Project implements Observer
 	}
 	
 	/**
-	 * @return
+	 * Retourne la liste des tâches non finies.
+	 *
+	 * @return  listTask
 	 */
 	public ArrayList<TaskMultiple> getListTask()
 	{
@@ -57,7 +63,9 @@ public class Project implements Observer
 	}
 	
 	/**
-	 * @return
+	 * Retourne la liste des tâches finies.
+	 *
+	 * @return listTaskDone
 	 */
 	public ArrayList<TaskMultiple> getListTaskDone()
 	{
@@ -65,7 +73,9 @@ public class Project implements Observer
 	}
 	
 	/**
-	 * @param pTask
+	 * Ajoute une tâche.
+	 *
+	 * @param pTask - taskMultiple
 	 */
 	public void addTask(TaskMultiple pTask)
 	{
@@ -78,9 +88,6 @@ public class Project implements Observer
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
-	 */
 	@Override
 	public void update(Observable obs, Object obj) {
 		if(obs instanceof Task){
