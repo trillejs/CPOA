@@ -130,7 +130,7 @@ public final class TaskList implements Runnable {
         			if( listeProjet.get(i).getListTask().get(j).getDeadLine().getDayOfWeek() == DateTime.now().getDayOfWeek() )
         			{
         				if(j == 0)
-        					out.println("Projet nÂ° : " + listeProjet.get(i).getName());
+        					out.println("Projet n° : " + listeProjet.get(i).getName());
         				
         				out.print(" tache : " + listeProjet.get(i).getListTask().get(j).getId());
         				out.println(" | description : " + listeProjet.get(i).getListTask().get(j).getDescription());
@@ -227,6 +227,11 @@ public final class TaskList implements Runnable {
             String[] projectTask = subcommandRest[1].split(" ", 2);
             addTaskToProject(projectTask[0], Long.parseLong(projectTask[1]));
         }
+        else if (subcommand.equals("taskToTask"))   
+        {
+            String[] projectTask = subcommandRest[1].split(" ", 2);
+            addTaskToTask(Long.parseLong(projectTask[0]), Long.parseLong(projectTask[1]));
+        }
     }
 
     private void addProject(String pName) 
@@ -237,6 +242,30 @@ public final class TaskList implements Runnable {
     private void addTask(Long id, String description) 
     {
     	listeTask.add(new TaskMultiple(id,description,false));
+    }
+    
+    private void addTaskToTask(long id, long id2){
+    	
+    	TaskMultiple t1=null;
+    	TaskMultiple t2=null;
+    	
+    	for(TaskMultiple t : this.listeTask){
+    		if(t.getId()==id)
+    			t1=t;
+    		else if(t.getId()==id2)
+    			t2=t;
+    	}
+    	
+    	if(t1==null || t2==null)
+    		System.out.println("Une de ces deux tâches n'existe pas.");
+		else{
+			try {
+				t1.addTask(t2);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+    	
     }
 
     private void addTaskToProject(String projectName, Long id) 
