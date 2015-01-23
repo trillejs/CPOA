@@ -1,5 +1,4 @@
 package com.codurance.training.tasks;
-import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 

@@ -8,7 +8,7 @@ import org.joda.time.DateTimeComparator;
 
 public class TaskMultiple extends Task{
 	
-	private ArrayList<Task> sousTaches;
+	private ArrayList<TaskMultiple> sousTaches;
 
 	public TaskMultiple(long id, String description, boolean done) {
 		this(id, description, done,null);		
@@ -16,10 +16,10 @@ public class TaskMultiple extends Task{
 	
 	public TaskMultiple(long id, String description, boolean done, DateTime pDeadLine) {
 		super(id, description, done,pDeadLine);
-		sousTaches = new ArrayList<Task>();
+		sousTaches = new ArrayList<TaskMultiple>();
 	}
 
-	public void addTask(Task pTask) throws Exception{
+	public void addTask(TaskMultiple pTask) throws Exception{
 		
 		if(this.sousTaches.contains(pTask))
 			throw new Exception("Tache déjà présente");
@@ -64,6 +64,10 @@ public class TaskMultiple extends Task{
 			
 		}
 		
+	}
+	
+	public ArrayList<TaskMultiple> getSousTaches() {
+		return this.sousTaches;
 	}
 	
 	@Override
