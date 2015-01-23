@@ -4,6 +4,10 @@ import java.util.Observer;
 
 import org.joda.time.DateTime;
 
+/**
+ * @author Jean-Sebastien TRILLE & Antoine RIVALIER
+ *
+ */
 
 public abstract class Task extends Observable implements Observer  {
     private final long id;
@@ -51,6 +55,12 @@ public abstract class Task extends Observable implements Observer  {
     }
     
     public void setDeadLine(DateTime pDeadLine){
+    	this.deadLine=pDeadLine;
+    	setChanged();
+		notifyObservers(this.deadLine);
+    }
+    
+    public void setDeadLineNoObserver(DateTime pDeadLine){
     	this.deadLine=pDeadLine;
     }
     

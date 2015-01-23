@@ -6,6 +6,10 @@ import java.util.Observable;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeComparator;
 
+/**
+ * @author Jean-Sebastien TRILLE & Antoine RIVALIER
+ *
+ */
 public class TaskMultiple extends Task{
 	
 	private ArrayList<TaskMultiple> sousTaches;
@@ -73,9 +77,11 @@ public class TaskMultiple extends Task{
 	@Override
 	public void update(Observable obs, Object obj) {
 		if(obs instanceof Task){
-			if(DateTimeComparator.getInstance().compare(this.getDeadLine(), ((Task) obs).getDeadLine())==-1){
-				this.setDeadLine(((Task) obs).getDeadLine());
-				
+			if(this.getDeadLine()==null){
+				this.setDeadLineNoObserver(((Task) obs).getDeadLine());
+			}
+			else if(DateTimeComparator.getInstance().compare(this.getDeadLine(), ((Task) obs).getDeadLine())==-1){
+				this.setDeadLineNoObserver(((Task) obs).getDeadLine());
 			}
 		}
 		

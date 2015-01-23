@@ -10,7 +10,10 @@ import java.util.ArrayList;
 import org.joda.time.DateTime;
 
 import com.codurance.training.projects.Project;
-
+/**
+ * @author Jean-Sebastien TRILLE & Antoine RIVALIER
+ *
+ */
 public final class TaskList implements Runnable {
 	private static final String QUIT = "quit";
 
@@ -36,25 +39,28 @@ public final class TaskList implements Runnable {
 
 
 		//Pour vous faciliter l'utilisation du programme quelques données :
-			this.listeProjet.add(new Project("Projet 1"));
-			this.listeProjet.add(new Project("Projet 2"));
+		this.listeProjet.add(new Project("Projet 1"));
+		this.listeProjet.add(new Project("Projet 2"));
 
-			this.listeTask.add(new TaskMultiple(1,"desc1",false));
-			this.listeTask.add(new TaskMultiple(2,"desc2",false));
-			this.listeTask.add(new TaskMultiple(3,"desc3",false));
-			this.listeTask.add(new TaskMultiple(4,"desc4",false));
-			this.listeTask.add(new TaskMultiple(5,"desc5",false));
-			this.listeTask.add(new TaskMultiple(6,"desc6",false));
+		this.listeTask.add(new TaskMultiple(1,"desc1",false));
+		this.listeTask.add(new TaskMultiple(2,"desc2",false));
+		this.listeTask.add(new TaskMultiple(3,"desc3",false));
+		this.listeTask.add(new TaskMultiple(4,"desc4",false));
+		this.listeTask.add(new TaskMultiple(5,"desc5",false));
+		this.listeTask.add(new TaskMultiple(6,"desc6",false));
+		this.listeTask.add(new TaskMultiple(7,"desc7",false));
 
-			addTaskToTask((long)1, (long) 2);
-			addTaskToTask((long)3, (long) 4);
-			
-			addTaskToProject("Projet 1", (long) 1);
-			addTaskToProject("Projet 1", (long) 3);
-			addTaskToProject("Projet 2", (long) 5);
-			addTaskToProject("Projet 2", (long) 6);
+		addTaskToTask((long)1, (long) 2);
+		addTaskToTask((long)3, (long) 4);
 
-			
+		addTaskToProject("Projet 1", (long) 1);
+		addTaskToProject("Projet 1", (long) 3);
+		addTaskToProject("Projet 2", (long) 5);
+		addTaskToProject("Projet 2", (long) 6);
+		addTaskToProject("Projet 1", (long) 7);
+		addTaskToProject("Projet 2", (long) 7);
+
+
 	}
 
 	public void run()
@@ -87,8 +93,8 @@ public final class TaskList implements Runnable {
 
 		switch (command) 
 		{
-		case "show":
-			show();
+		case "delete":
+			delete(Long.parseLong(commandRest[1]));
 			break;
 		case "add":
 			add(commandRest[1]);
@@ -106,8 +112,12 @@ public final class TaskList implements Runnable {
 			uncheck(commandRest[1]);
 			break;
 		case "view":
-			if( commandRest[1].equals("by deadline"));
-			viewByDeadLine();
+			if( commandRest[1].equals("by deadline"))
+				viewByDeadLine();
+			else if(commandRest[1].equals("by date"))
+				viewByDate();
+			else if(commandRest[1].equals("by project"))
+				show();
 			break;
 		case "help":
 			help();
@@ -148,7 +158,7 @@ public final class TaskList implements Runnable {
 		}
 	}
 
-	public void today()
+	private void today()
 	{
 		for(Project p : this.listeProjet)
 		{	
@@ -168,7 +178,7 @@ public final class TaskList implements Runnable {
 		}
 	}
 
-	public void deadline(long pId, String commandLine)
+	private void deadline(long pId, String commandLine)
 	{
 
 		String[] date = commandLine.split("/", 3);
@@ -192,7 +202,49 @@ public final class TaskList implements Runnable {
 			out.println("Aucun projet ayant cet ID");
 	}
 
-	public void viewByDeadLine()
+	private void viewByDate()
+	{
+		ArrayList<TaskMultiple> listeDate = new ArrayList<TaskMultiple>();
+
+		for(TaskMultiple task : this.listeTask)
+		{
+			if( task.getDeadLine() != null )
+			{
+				int k = listeDate.size();
+
+				do
+				{
+					//On vérifie si la liste n'est pas vide avant de devoir comparer des DateTime
+
+					if( listeDate.size() == 0 )
+						listeDate.add(task);
+					else
+					{
+						if( task.getDate().isAfter(listeDate.get(k-1).getDate()) )
+						{
+							listeDate.add(k, task);
+							k = 0;
+						}
+						else if( k - 1 == 0 )
+							listeDate.add(k - 1, task);
+					}
+
+					k--;
+				}
+				while( k > 0 );
+			}
+
+		}
+
+		// un fois que toutes les taches avec deadLine sont dans notre List on affiche
+
+		for(TaskMultiple task : listeDate)
+		{
+			out.println( "ID : " + task.getId() + " deadline : " + task.getDeadLine().getDayOfWeek() + "/" + task.getDeadLine().getMonthOfYear() + "/" + task.getDeadLine().getYear());
+		} 	
+	}
+
+	private void viewByDeadLine()
 	{
 		ArrayList<TaskMultiple> listeDeadLine = new ArrayList<TaskMultiple>();
 
@@ -233,6 +285,31 @@ public final class TaskList implements Runnable {
 			out.println( "ID : " + task.getId() + " deadline : " + task.getDeadLine().getDayOfWeek() + "/" + task.getDeadLine().getMonthOfYear() + "/" + task.getDeadLine().getYear());
 		} 	
 	}
+
+	private void delete(long id)
+	{
+		for(TaskMultiple task : this.listeTask){
+			for(TaskMultiple t : task.getSousTaches()){
+				if(t.getId()==id)
+					task.getSousTaches().remove(t);
+				break;
+			}
+		}
+		
+		for(TaskMultiple task : this.listeTask){
+
+			if(task.getId()==id)
+			{
+				this.listeTask.remove(task);
+				for(Project p : this.listeProjet){
+					p.getListTask().remove(task);
+					p.getListTaskDone().remove(task);
+				}
+				return;
+			}
+		}
+	}
+
 
 	private void add(String commandLine)
 	{
@@ -343,9 +420,17 @@ public final class TaskList implements Runnable {
 
 		for(TaskMultiple t : listeTask)
 		{
-			if(t.getId()==id)
+			if(t.getId()==id){
 				t.setDone(done);
-			return;
+
+				//Si une tâche qui en contient d'autres est marquée comme finie, les tâches qu'elle contient doivent l'être aussi
+				if(done){
+					for(TaskMultiple task : t.getSousTaches()){
+						task.setDone(done);
+					}
+				}
+				return;
+			}		
 
 		}
 		out.printf("Could not find a task with an ID of %d.", id);
@@ -355,13 +440,14 @@ public final class TaskList implements Runnable {
 	private void help() 
 	{
 		out.println("Commands:");
-		out.println("  show");
 		out.println("  add project <project name>");
 		out.println("  add task <Task id> <task description>");
 		out.println("  add taskToTask <Task1 id> <task2 id> Task2 is added to Task1");
 		out.println("  add taskToProject <project name> <task id>");
 		out.println("  deadline <ID> <date>");
 		out.println("  view by dead line");
+		out.println("  view by date");
+		out.println("  view by project");
 		out.println("  check <task ID>");
 		out.println("  uncheck <task ID>");
 		out.println("  today");
