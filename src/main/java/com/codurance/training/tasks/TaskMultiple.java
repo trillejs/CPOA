@@ -22,10 +22,11 @@ public class TaskMultiple extends Task{
 	public void addTask(Task pTask) throws Exception{
 		
 		if(this.sousTaches.contains(pTask))
-			throw new Exception("Tache d�j� pr�sente");
+			throw new Exception("Tache déjà présente");
 		
 		else if(this.getDeadLine()==null){
 			
+			pTask.addObserver(this);
 			if(pTask.getDeadLine()==null)
 				
 				this.sousTaches.add(pTask);
@@ -38,6 +39,7 @@ public class TaskMultiple extends Task{
 			}	
 		}else{
 			
+			pTask.addObserver(this);
 			if(pTask.getDeadLine()==null)				
 				this.sousTaches.add(pTask);
 			
