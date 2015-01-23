@@ -32,7 +32,7 @@ public final class TaskList implements Runnable {
     {
         this.in = reader;
         this.out = writer;
-        listeProjet = new ArrayList<Project>();
+        this.listeProjet = new ArrayList<Project>();
     }
 
     public void run()
@@ -62,6 +62,7 @@ public final class TaskList implements Runnable {
     {
         String[] commandRest = commandLine.split(" ", 2);
         String command = commandRest[0];
+        
         switch (command) 
         {
             case "show":
@@ -70,6 +71,9 @@ public final class TaskList implements Runnable {
             case "add":
                 add(commandRest[1]);
                 break;
+            case "deadline":
+            	String[] parametre = commandLine.split(" ", 2);
+            	deadline(Long.parseLong(parametre[0]), parametre[1]);
             case "today":
             	today();
             	break;
@@ -134,9 +138,70 @@ public final class TaskList implements Runnable {
     	}
     }
     
-    public void viewByDeadLine()
+    public void deadline(long pId, String commandLine)
     {
     	
+    	 String[] date = commandLine.split(" ", 3);
+    	 DateTime deadLine = new DateTime( Integer.parseInt(date[0]), Integer.parseInt(date[1]), Integer.parseInt(date[2]), 0, 0);
+    	
+    	for(int i = 0; i < listeProjet.size(); i++)
+    	{
+    		int j = listeProjet.get(i).getListTask().size();
+    		
+    		while( j > 0 )
+    		{
+    			if( listeProjet.get(i).getListTask().get(j-1).getId() == pId )
+    			{
+    				listeProjet.get(i).getListTask().get(j-1).setDeadLine(deadLine);
+    				j = 0;
+    			}
+    			
+    			j--;
+    			
+    		}
+    	}
+    }
+    
+    public void viewByDeadLine()
+    {
+    	ArrayList<DateTime> listeDeadLine = new ArrayList<DateTime>();
+    	
+    	for(int i = 0; i < listeProjet.size(); i++)
+    	{
+    		for(int j = 0; j < listeProjet.get(i).getListTask().size(); j++)
+    		{
+    			if( listeProjet.get(i).getListTask().get(j).getDeadLine() != null )
+    			{
+    				int k = listeDeadLine.size();
+    				
+    				do
+    				{
+    					//On vérifie si la liste n'est pas vide avant de devoir comparer des DateTime
+    					
+    					if( listeDeadLine.size() == 0 )
+    						listeDeadLine.add(listeProjet.get(i).getListTask().get(j).getDeadLine());
+    					else
+    					{
+    						if( listeProjet.get(i).getListTask().get(j).getDeadLine().isAfter(listeDeadLine.get(k-1)) )
+    						{
+    							listeDeadLine.add(k, listeProjet.get(i).getListTask().get(j).getDeadLine());
+    							k = 0;
+    						}
+    					}
+    						
+    					k--;
+    				}
+    				while( k > 0 );
+    			}
+    		}
+    	}
+    	
+		// un fois que toutes les taches avec deadLine sont dans notre List on affiche
+		
+		for( int i = 0; i < listeDeadLine.size(); i++)
+		{
+			out.println(listeDeadLine.toString());
+		} 	
     }
 
     private void add(String commandLine)
@@ -170,7 +235,7 @@ public final class TaskList implements Runnable {
     	{
     		if(listeProjet.get(i).getName().equals(projectName))
     		{
-    			exist = true;
+    			exist = true;  			
     			listeProjet.get(i).getListTask().add(new TaskMultiple(this.nextId(), description, false));
     		}
     	}
@@ -184,7 +249,8 @@ public final class TaskList implements Runnable {
         
     }
 
-    private void check(String idString) {
+    private void check(String idString) 
+    {
         setDone(idString, true);
     }
 
@@ -231,6 +297,8 @@ public final class TaskList implements Runnable {
         out.println("  show");
         out.println("  add project <project name>");
         out.println("  add task <project name> <task description>");
+        out.println("  deadline <ID> <date>");
+        out.println("  view by dead line");
         out.println("  check <task ID>");
         out.println("  uncheck <task ID>");
         out.println("  today");

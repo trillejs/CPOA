@@ -36,7 +36,9 @@ public class TaskMultiple extends Task{
 				this.setDeadLine(pTask.getDeadLine());
 				
 			}	
-		}else{
+		}
+		else
+		{
 			
 			if(pTask.getDeadLine()==null)				
 				this.sousTaches.add(pTask);
@@ -63,9 +65,10 @@ public class TaskMultiple extends Task{
 		
 	}
 	
-	@Override
-	public void update(Observable obs, Object obj) {
-		if(obs instanceof Task){
+	public void update(Observable obs, Object obj) 
+	{
+		if(obs instanceof Task)
+		{
 
 		}
 		
