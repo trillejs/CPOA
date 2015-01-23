@@ -244,7 +244,8 @@ public final class TaskList implements Runnable {
     		if(listeProjet.get(i).getName().equals(projectName))
     		{
     			exist = true;  			
-    			listeProjet.get(i).getListTask().add(new TaskMultiple(this.nextId(), description, false));
+    			TaskMultiple pTask = new TaskMultiple(this.nextId(),description,false);
+    			listeProjet.get(i).addTask(pTask);
     		}
     	}
     	
