@@ -21,6 +21,7 @@ public final class TaskList implements Runnable {
 
     private long lastId = 0;
     private ArrayList<Project> listeProjet;
+    private ArrayList<TaskMultiple> listeTask;
 
     public static void main(String[] args) throws Exception {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -33,6 +34,7 @@ public final class TaskList implements Runnable {
         this.in = reader;
         this.out = writer;
         this.listeProjet = new ArrayList<Project>();
+        this.listeTask = new ArrayList<TaskMultiple>();
     }
 
     public void run()
@@ -128,7 +130,7 @@ public final class TaskList implements Runnable {
         			if( listeProjet.get(i).getListTask().get(j).getDeadLine().getDayOfWeek() == DateTime.now().getDayOfWeek() )
         			{
         				if(j == 0)
-        					out.println("Projet n° : " + listeProjet.get(i).getName());
+        					out.println("Projet nÂ° : " + listeProjet.get(i).getName());
         				
         				out.print(" tache : " + listeProjet.get(i).getListTask().get(j).getId());
         				out.println(" | description : " + listeProjet.get(i).getListTask().get(j).getDescription());
@@ -182,7 +184,7 @@ public final class TaskList implements Runnable {
     				
     				do
     				{
-    					//On vérifie si la liste n'est pas vide avant de devoir comparer des DateTime
+    					//On vÃ©rifie si la liste n'est pas vide avant de devoir comparer des DateTime
     					
     					if( listeDeadLine.size() == 0 )
     						listeDeadLine.add(listeProjet.get(i).getListTask().get(j));
@@ -224,7 +226,12 @@ public final class TaskList implements Runnable {
         else if (subcommand.equals("task"))   
         {
             String[] projectTask = subcommandRest[1].split(" ", 2);
-            addTask(projectTask[0], projectTask[1]);
+            addTask(Long.parseLong(projectTask[0]), projectTask[1]);
+        }        
+        else if (subcommand.equals("taskToProject"))   
+        {
+            String[] projectTask = subcommandRest[1].split(" ", 2);
+            addTaskToProject(projectTask[0], Long.parseLong(projectTask[1]));
         }
     }
 
@@ -232,8 +239,13 @@ public final class TaskList implements Runnable {
     {
     	listeProjet.add(new Project(pName));
     }
+    
+    private void addTask(Long id, String description) 
+    {
+    	listeTask.add(new TaskMultiple(id,description,false));
+    }
 
-    private void addTask(String projectName, String description) 
+    private void addTaskToProject(String projectName, Long id) 
     {
     	
     	boolean exist = false;
@@ -243,9 +255,16 @@ public final class TaskList implements Runnable {
     	{
     		if(listeProjet.get(i).getName().equals(projectName))
     		{
-    			exist = true;  			
-    			TaskMultiple pTask = new TaskMultiple(this.nextId(),description,false);
-    			listeProjet.get(i).addTask(pTask);
+    			exist = true;  	
+    			TaskMultiple pTask=null;
+    			for(TaskMultiple t : listeTask){
+    				if(t.getId()==id)
+    					pTask=t;	   				
+    			}
+    			if(pTask==null)
+    				System.out.println("Could not find the task with id"+id);
+    			else
+    				listeProjet.get(i).addTask(pTask);
     		}
     	}
     	
@@ -305,7 +324,8 @@ public final class TaskList implements Runnable {
         out.println("Commands:");
         out.println("  show");
         out.println("  add project <project name>");
-        out.println("  add task <project name> <task description>");
+        out.println("  add task <Task id> <task description>");
+        out.println("  add taskToProject <project name> <task id>");
         out.println("  deadline <ID> <date>");
         out.println("  view by dead line");
         out.println("  check <task ID>");
