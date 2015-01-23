@@ -72,7 +72,7 @@ public final class TaskList implements Runnable {
                 add(commandRest[1]);
                 break;
             case "deadline":
-            	String[] parametre = commandLine.split(" ", 2);
+            	String[] parametre = commandRest[1].split(" ", 2);
             	deadline(Long.parseLong(parametre[0]), parametre[1]);
             case "today":
             	today();
@@ -84,7 +84,7 @@ public final class TaskList implements Runnable {
                 uncheck(commandRest[1]);
                 break;
             case "view":
-            	if( commandRest[1].equals("by deadLine"));
+            	if( commandRest[1].equals("by deadline"));
             		viewByDeadLine();
             	break;
             case "help":
@@ -141,8 +141,10 @@ public final class TaskList implements Runnable {
     public void deadline(long pId, String commandLine)
     {
     	
-    	 String[] date = commandLine.split(" ", 3);
+    	 String[] date = commandLine.split("/", 3);
+    	 out.print(date[0] + "/" + date[1] + "/" + date[2] + " ");
     	 DateTime deadLine = new DateTime( Integer.parseInt(date[0]), Integer.parseInt(date[1]), Integer.parseInt(date[2]), 0, 0);
+    	 boolean exist = false;
     	
     	for(int i = 0; i < listeProjet.size(); i++)
     	{
@@ -153,13 +155,18 @@ public final class TaskList implements Runnable {
     			if( listeProjet.get(i).getListTask().get(j-1).getId() == pId )
     			{
     				listeProjet.get(i).getListTask().get(j-1).setDeadLine(deadLine);
+    				out.println(listeProjet.get(i).getListTask().get(j-1).getDeadLine());
     				j = 0;
+    				exist = true;
     			}
     			
     			j--;
     			
     		}
     	}
+    	
+    	if( exist == false )
+    		out.println("Aucun projet ayant cet ID");
     }
     
     public void viewByDeadLine()
@@ -185,8 +192,12 @@ public final class TaskList implements Runnable {
     						if( listeProjet.get(i).getListTask().get(j).getDeadLine().isAfter(listeDeadLine.get(k-1)) )
     						{
     							listeDeadLine.add(k, listeProjet.get(i).getListTask().get(j).getDeadLine());
+    							out.print(" | " +  k +" ");
+    							out.print(listeProjet.get(i).getListTask().get(j).getDeadLine());
     							k = 0;
     						}
+    						else if( k - 1 == 0 )
+    							listeDeadLine.add(k - 1, listeProjet.get(i).getListTask().get(j).getDeadLine());
     					}
     						
     					k--;
@@ -200,7 +211,8 @@ public final class TaskList implements Runnable {
 		
 		for( int i = 0; i < listeDeadLine.size(); i++)
 		{
-			out.println(listeDeadLine.toString());
+			out.println(listeDeadLine.get(i).toString());
+			out.println(listeDeadLine.get(i).getDayOfWeek() + "/" + listeDeadLine.get(i).getMonthOfYear() + "/" + listeDeadLine.get(i).getYearOfCentury());
 		} 	
     }
 
