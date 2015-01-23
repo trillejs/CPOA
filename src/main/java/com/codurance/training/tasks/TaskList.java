@@ -143,7 +143,7 @@ public final class TaskList implements Runnable {
     	
     	 String[] date = commandLine.split("/", 3);
     	 out.print(date[0] + "/" + date[1] + "/" + date[2] + " ");
-    	 DateTime deadLine = new DateTime( Integer.parseInt(date[0]), Integer.parseInt(date[1]), Integer.parseInt(date[2]), 0, 0);
+    	 DateTime deadLine = new DateTime( Integer.parseInt(date[2]), Integer.parseInt(date[1]), Integer.parseInt(date[0]), 0, 0);
     	 boolean exist = false;
     	
     	for(int i = 0; i < listeProjet.size(); i++)
@@ -155,7 +155,6 @@ public final class TaskList implements Runnable {
     			if( listeProjet.get(i).getListTask().get(j-1).getId() == pId )
     			{
     				listeProjet.get(i).getListTask().get(j-1).setDeadLine(deadLine);
-    				out.println(listeProjet.get(i).getListTask().get(j-1).getDeadLine());
     				j = 0;
     				exist = true;
     			}
@@ -171,7 +170,7 @@ public final class TaskList implements Runnable {
     
     public void viewByDeadLine()
     {
-    	ArrayList<DateTime> listeDeadLine = new ArrayList<DateTime>();
+    	ArrayList<TaskMultiple> listeDeadLine = new ArrayList<TaskMultiple>();
     	
     	for(int i = 0; i < listeProjet.size(); i++)
     	{
@@ -186,18 +185,16 @@ public final class TaskList implements Runnable {
     					//On vérifie si la liste n'est pas vide avant de devoir comparer des DateTime
     					
     					if( listeDeadLine.size() == 0 )
-    						listeDeadLine.add(listeProjet.get(i).getListTask().get(j).getDeadLine());
+    						listeDeadLine.add(listeProjet.get(i).getListTask().get(j));
     					else
     					{
-    						if( listeProjet.get(i).getListTask().get(j).getDeadLine().isAfter(listeDeadLine.get(k-1)) )
+    						if( listeProjet.get(i).getListTask().get(j).getDeadLine().isAfter(listeDeadLine.get(k-1).getDeadLine()) )
     						{
-    							listeDeadLine.add(k, listeProjet.get(i).getListTask().get(j).getDeadLine());
-    							out.print(" | " +  k +" ");
-    							out.print(listeProjet.get(i).getListTask().get(j).getDeadLine());
+    							listeDeadLine.add(k, listeProjet.get(i).getListTask().get(j));
     							k = 0;
     						}
     						else if( k - 1 == 0 )
-    							listeDeadLine.add(k - 1, listeProjet.get(i).getListTask().get(j).getDeadLine());
+    							listeDeadLine.add(k - 1, listeProjet.get(i).getListTask().get(j));
     					}
     						
     					k--;
@@ -211,8 +208,7 @@ public final class TaskList implements Runnable {
 		
 		for( int i = 0; i < listeDeadLine.size(); i++)
 		{
-			out.println(listeDeadLine.get(i).toString());
-			out.println(listeDeadLine.get(i).getDayOfWeek() + "/" + listeDeadLine.get(i).getMonthOfYear() + "/" + listeDeadLine.get(i).getYearOfCentury());
+			out.println( "ID : " + listeDeadLine.get(i).getId() + " deadline : " + listeDeadLine.get(i).getDeadLine().getDayOfWeek() + "/" + listeDeadLine.get(i).getDeadLine().getMonthOfYear() + "/" + listeDeadLine.get(i).getDeadLine().getYear());
 		} 	
     }
 
