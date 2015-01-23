@@ -13,31 +13,33 @@ import javax.swing.JButton;
 import java.awt.Dimension;
 import javax.swing.SwingConstants;
 
-import data.model.Student;
+import gui.model.TaskTableModel;
+import com.codurance.training.projects.*;
+import com.codurance.training.tasks.*;
 
 /**
- * Boite de dialogue utilisée créer ou modifier une donnée de type Student.
+ * Boite de dialogue utilisï¿½e crï¿½er ou modifier une donnï¿½e de type TaskMultiple.
  * 
- * La boite de dialogue est activée par la méthode publique "ouvrirDialog".
+ * La boite de dialogue est activï¿½e par la mï¿½thode publique "ouvrirDialog".
  * Il existe 3 modes de fonctionnement distincts (Cf. enumeration "ModeEdition").
  * 
  * @author Fabrice PELLEAU
  */
 
-public class StudentDialog extends JDialog {
+public class TaskMultipleDialog extends JDialog {
 	
 	public enum ModeEdition {
 		CREATION, MODIFICATION, SUPPRESSION
 	};
 
-	private Student student = null;
+	private TaskMultiple TaskMultiple = null;
 	private boolean etatValidation = false;
 	private ModeEdition modeActuel;
 
 	private static final long serialVersionUID = 1L;
 
 	// =======================================================================
-	// Attributs graphiques (gérés par V.E.)
+	// Attributs graphiques (gï¿½rï¿½s par V.E.)
 	// =======================================================================
 	
 	private JPanel jContentPane = null;
@@ -57,15 +59,15 @@ public class StudentDialog extends JDialog {
 	private JLabel labMessage = null;
 
 	// =======================================================================
-	// Méthodes publiques
+	// Mï¿½thodes publiques
 	// =======================================================================
 	
 	/**
-	 * Constructeur permettant l'association de la JDialog avec la fenêtre appelante.
+	 * Constructeur permettant l'association de la JDialog avec la fenï¿½tre appelante.
 	 * 
 	 * @param owner fenetre appellante.
 	 */
-	public StudentDialog(Frame owner) {
+	public TaskMultipleDialog(Frame owner) {
 		super(owner);
 		this.initialize();
 	}
@@ -73,44 +75,44 @@ public class StudentDialog extends JDialog {
 	/**
      * Ouverture de la boite de dialogue.
 	 *
-	 * @param stud  Objet de type Student à éditer (jamais null).
+	 * @param stud  Objet de type TaskMultiple ï¿½ ï¿½diter (jamais null).
 	 * @param mode  Mode d'ouverture (CREATION, MODIFICATION, SUPPRESSION)
-	 * @return true si l'action est validée / false sinon
+	 * @return true si l'action est validï¿½e / false sinon
 	 */
-	public boolean ouvrirDialogue(Student stud, StudentDialog.ModeEdition mode) {
+	public boolean ouvrirDialogue(TaskMultiple task, TaskMultipleDialog.ModeEdition mode) {
 		this.modeActuel = mode;
 		switch (mode) {
 		case CREATION:
-			stud.id=0;
-			stud.surname = "";
-			stud.firstname = "";
-			stud.TPgroup="";
-			this.student = stud;
+			task.id=0;
+			task.surname = "";
+			task.firstname = "";
+			task.TPgroup="";
+			this.TaskMultiple = task;
 			this.getTxtID().setEnabled(false);
 			this.getTxtName().setEnabled(true);
 			this.getTxtFirstName().setEnabled(true);
 			this.getTxtGroup().setEnabled(true);
-			this.labMessage.setText("Description du Student à créer");
+			this.labMessage.setText("Description du TaskMultiple ï¿½ crï¿½er");
 			this.getButValider().setText("Ajouter");
 			this.getButAnnuler().setText("Annuler");
 			break;
 		case MODIFICATION:
-			this.student = stud;
+			this.TaskMultiple = stud;
 			this.getTxtID().setEnabled(false);
 			this.getTxtName().setEnabled(true);
 			this.getTxtFirstName().setEnabled(true);
 			this.getTxtGroup().setEnabled(true);
-			this.labMessage.setText("Student actuellement en base");
+			this.labMessage.setText("TaskMultiple actuellement en base");
 			this.getButValider().setText("Modifier");
 			this.getButAnnuler().setText("Annuler");
 			break;
 		case SUPPRESSION:
-			this.student = stud;
+			this.TaskMultiple = stud;
 			this.getTxtID().setEnabled(false);
 			this.getTxtName().setEnabled(false);
 			this.getTxtFirstName().setEnabled(false);
 			this.getTxtGroup().setEnabled(false);
-			this.labMessage.setText("Voulez-vous réellement supprimer ce Student ?");
+			this.labMessage.setText("Voulez-vous rï¿½ellement supprimer ce TaskMultiple ?");
 			this.getButValider().setText("Supprimer");
 			this.getButAnnuler().setText("Conserver");
 			break;
@@ -122,12 +124,12 @@ public class StudentDialog extends JDialog {
 		
 		this.setVisible(true);
 		
-		// le programme appelant est bloqué jusqu'au masquage de la JDialog.
+		// le programme appelant est bloquï¿½ jusqu'au masquage de la JDialog.
 		return this.etatValidation;
 	}
 
 	// =======================================================================
-	// Initialisation et accesseur des composants graphiques (géré par V.E.)
+	// Initialisation et accesseur des composants graphiques (gï¿½rï¿½ par V.E.)
 	// =======================================================================
 	/**
 	 * This method initializes this
@@ -136,7 +138,7 @@ public class StudentDialog extends JDialog {
 	 */
 	private void initialize() {
 		this.setSize(386, 200);
-		this.setTitle("Gestion d'un Student");
+		this.setTitle("Gestion d'un TaskMultiple");
 		this.setContentPane(this.getJContentPane());
 	}
 
@@ -148,7 +150,7 @@ public class StudentDialog extends JDialog {
 	private JPanel getJContentPane() {
 		if (this.jContentPane == null) {
 			this.labMessage = new JLabel();
-			this.labMessage.setText("Action à réaliser");
+			this.labMessage.setText("Action ï¿½ rï¿½aliser");
 			this.labMessage.setHorizontalTextPosition(SwingConstants.CENTER);
 			this.labMessage.setHorizontalAlignment(SwingConstants.CENTER);
 			this.labMessage.setPreferredSize(new Dimension(93, 32));
@@ -172,7 +174,7 @@ public class StudentDialog extends JDialog {
 			this.labGroup = new JLabel();
 			this.labGroup.setText("Groupe TP");
 			this.labFirstname = new JLabel();
-			this.labFirstname.setText("Prénom");
+			this.labFirstname.setText("Prï¿½nom");
 			this.lanName = new JLabel();
 			this.lanName.setText("Nom");
 			this.labID = new JLabel();
@@ -231,7 +233,7 @@ public class StudentDialog extends JDialog {
 			this.txtName.addFocusListener(new java.awt.event.FocusAdapter() {
 				@Override
 				public void focusLost(java.awt.event.FocusEvent e) {
-					StudentDialog.this.student.surname = StudentDialog.this.getTxtName().getText().trim();
+					TaskMultipleDialog.this.TaskMultiple.surname = TaskMultipleDialog.this.getTxtName().getText().trim();
 				}
 			});
 		}
@@ -249,7 +251,7 @@ public class StudentDialog extends JDialog {
 			this.txtFirstname.addFocusListener(new java.awt.event.FocusAdapter() {
 				@Override
 				public void focusLost(java.awt.event.FocusEvent e) {
-					StudentDialog.this.student.firstname = StudentDialog.this.getTxtFirstName().getText().trim();
+					TaskMultipleDialog.this.TaskMultiple.firstname = TaskMultipleDialog.this.getTxtFirstName().getText().trim();
 				}
 			});
 		}
@@ -267,7 +269,7 @@ public class StudentDialog extends JDialog {
 			this.txtGroup.addFocusListener(new java.awt.event.FocusAdapter() {
 				@Override
 				public void focusLost(java.awt.event.FocusEvent e) {
-					StudentDialog.this.student.TPgroup = StudentDialog.this.getTxtGroup().getText().trim();
+					TaskMultipleDialog.this.TaskMultiple.TPgroup = TaskMultipleDialog.this.getTxtGroup().getText().trim();
 				}
 			});
 		}
@@ -303,7 +305,7 @@ public class StudentDialog extends JDialog {
 			this.butValider.setText("txt valider");
 			this.butValider.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					StudentDialog.this.actionValider();
+					TaskMultipleDialog.this.actionValider();
 				}
 			});
 		}
@@ -321,7 +323,7 @@ public class StudentDialog extends JDialog {
 			this.butAnnuler.setText("txt annuler");
 			this.butAnnuler.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					StudentDialog.this.actionAnnuler();
+					TaskMultipleDialog.this.actionAnnuler();
 				}
 			});
 		}
@@ -329,45 +331,45 @@ public class StudentDialog extends JDialog {
 	}
 
 	// =======================================================================
-	// Méthodes internes liées aux fonctionnalités du composant
+	// Mï¿½thodes internes liï¿½es aux fonctionnalitï¿½s du composant
 	// =======================================================================
 
 	/**
-	 * Mise à jour des zones d'édition en fonction de l'objet "Student" actuellement associé.
+	 * Mise ï¿½ jour des zones d'ï¿½dition en fonction de l'objet "TaskMultiple" actuellement associï¿½.
 	 */
 	private void updateFields() {
-		this.getTxtID().setText(""+this.student.id);
-		this.getTxtName().setText(this.student.surname);
-		this.getTxtFirstName().setText(this.student.firstname);
-		this.getTxtGroup().setText(this.student.TPgroup);
+		this.getTxtID().setText(""+this.TaskMultiple.id);
+		this.getTxtName().setText(this.TaskMultiple.surname);
+		this.getTxtFirstName().setText(this.TaskMultiple.firstname);
+		this.getTxtGroup().setText(this.TaskMultiple.TPgroup);
 	}
 	/**
-	 * Controle de validité sur les champs modifiables.
-	 *  - l'attribut "studnt" est automatiquement actualisé (évènements focusLost des textField)
-	 *  - la validité de l'age a déjà ete testée : entier d'interval [0..120]
+	 * Controle de validitï¿½ sur les champs modifiables.
+	 *  - l'attribut "studnt" est automatiquement actualisï¿½ (ï¿½vï¿½nements focusLost des textField)
+	 *  - la validitï¿½ de l'age a dï¿½jï¿½ ete testï¿½e : entier d'interval [0..120]
 	 *  
 	 * @return true si tous les champs sont valides.
 	 */
-	private boolean isStudentValide() {
-		if ( this.student.surname.isEmpty() ) {
-	    	JOptionPane.showMessageDialog(this, "Le nom ne doit pas être vide");
+	private boolean isTaskMultipleValide() {
+		if ( this.TaskMultiple.surname.isEmpty() ) {
+	    	JOptionPane.showMessageDialog(this, "Le nom ne doit pas ï¿½tre vide");
 	    	this.getTxtName().requestFocus();
 			return false;
 		}
-		if ( this.student.firstname.isEmpty() ) {
-	    	JOptionPane.showMessageDialog(this, "Le prénom ne doit pas être vide");
+		if ( this.TaskMultiple.firstname.isEmpty() ) {
+	    	JOptionPane.showMessageDialog(this, "Le prï¿½nom ne doit pas ï¿½tre vide");
 	    	this.getTxtFirstName().requestFocus();
 			return false;
 		}
-		if ( this.student.TPgroup.isEmpty() ) {
-	    	JOptionPane.showMessageDialog(this, "Le groupe TP ne doit pas être vide");
+		if ( this.TaskMultiple.TPgroup.isEmpty() ) {
+	    	JOptionPane.showMessageDialog(this, "Le groupe TP ne doit pas ï¿½tre vide");
 	    	this.getTxtGroup().requestFocus();
 			return false;
 		}
-		this.student.TPgroup = this.student.TPgroup.toUpperCase();
-		if ( this.student.TPgroup.length() != 2 
-				||  ! (""+this.student.TPgroup.charAt(0)).matches("1|2|3|4")
-				||  ! (""+this.student.TPgroup.charAt(1)).matches("A|B")
+		this.TaskMultiple.TPgroup = this.TaskMultiple.TPgroup.toUpperCase();
+		if ( this.TaskMultiple.TPgroup.length() != 2 
+				||  ! (""+this.TaskMultiple.TPgroup.charAt(0)).matches("1|2|3|4")
+				||  ! (""+this.TaskMultiple.TPgroup.charAt(1)).matches("A|B")
 			) {
 	    	JOptionPane.showMessageDialog(this, "Groupe TP invalide (1|2|3|4  A|B)");
 	    	this.getTxtGroup().requestFocus();
@@ -384,13 +386,13 @@ public class StudentDialog extends JDialog {
 	private void actionValider() {
 		switch (this.modeActuel) {
 		case CREATION:
-			if (this.isStudentValide()) {
+			if (this.isTaskMultipleValide()) {
 				this.etatValidation = true;
 				this.setVisible(false);
 			}
 			break;
 		case MODIFICATION:
-			if (this.isStudentValide()) {
+			if (this.isTaskMultipleValide()) {
 				this.etatValidation = true;
 				this.setVisible(false);
 			}

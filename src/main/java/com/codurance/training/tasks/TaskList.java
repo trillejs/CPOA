@@ -148,22 +148,16 @@ public final class TaskList implements Runnable {
     	 DateTime deadLine = new DateTime( Integer.parseInt(date[2]), Integer.parseInt(date[1]), Integer.parseInt(date[0]), 0, 0);
     	 boolean exist = false;
     	
-    	for(int i = 0; i < listeProjet.size(); i++)
+    	for(TaskMultiple t : listeTask)
     	{
-    		int j = listeProjet.get(i).getListTask().size();
     		
-    		while( j > 0 )
-    		{
-    			if( listeProjet.get(i).getListTask().get(j-1).getId() == pId )
+    			if( t.getId() == pId )
     			{
-    				listeProjet.get(i).getListTask().get(j-1).setDeadLine(deadLine);
-    				j = 0;
+    				t.setDeadLine(deadLine);
     				exist = true;
     			}
     			
-    			j--;
-    			
-    		}
+
     	}
     	
     	if( exist == false )
@@ -262,7 +256,7 @@ public final class TaskList implements Runnable {
     					pTask=t;	   				
     			}
     			if(pTask==null)
-    				System.out.println("Could not find the task with id"+id);
+    				System.out.println("Could not find the task with id "+id);
     			else
     				listeProjet.get(i).addTask(pTask);
     		}

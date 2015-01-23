@@ -11,10 +11,11 @@ import com.codurance.training.tasks.Task;
 import com.codurance.training.tasks.TaskMultiple;
 import com.sun.xml.internal.ws.util.StringUtils;
 
-import data.model.task;
+import com.codurance.training.projects.*;
+import com.codurance.training.tasks.*;
 
 /**
- * @author André PENINOU
+ * @author Andrï¿½ PENINOU
  * @author Fabrice PELLEAU
  */
 
@@ -32,7 +33,7 @@ public class TaskTableModel extends AbstractTableModel {
 	}
 	
 	// =======================================================================
-	// Surcharges des méthodes abstraites de la classe AbstractTableModel
+	// Surcharges des mï¿½thodes abstraites de la classe AbstractTableModel
 	// =======================================================================
 	
 	public int getColumnCount() {
@@ -66,12 +67,12 @@ public class TaskTableModel extends AbstractTableModel {
 	}
 	
 	// =======================================================================
-	// Méthodes spécifiques à la classe taskTableModel
+	// Mï¿½thodes spï¿½cifiques ï¿½ la classe taskTableModel
 	// =======================================================================
 	/**
-	 * Lecture (ou relecture forcée) des données dans la base
+	 * Lecture (ou relecture forcï¿½e) des donnï¿½es dans la base
 	 * 
-	 * @param listeDonnees	  ArrayList contenant les tasks à présenter dans la table
+	 * @param listeDonnees	  ArrayList contenant les tasks ï¿½ prï¿½senter dans la table
 	 */
 	public void loadDatas( List<Task> listeDonnees ) {
 		this.tasklist = listeDonnees;
@@ -80,11 +81,11 @@ public class TaskTableModel extends AbstractTableModel {
 	
 	
 	/**
-	 * Retourner la copie d'un élément de type task représentant l'enregistrement de la ligne "lig".
+	 * Retourner la copie d'un ï¿½lï¿½ment de type task reprï¿½sentant l'enregistrement de la ligne "lig".
 	 * 
-	 * @param lig numéro de la ligne (dans la table).
+	 * @param lig numï¿½ro de la ligne (dans la table).
 	 * 
-	 * @return l'élément concerné ou NULL en cas d'erreur
+	 * @return l'ï¿½lï¿½ment concernï¿½ ou NULL en cas d'erreur
 	 */
 	public Task gettaskAt(int lig) {
 		Task task = null;
@@ -105,7 +106,7 @@ public class TaskTableModel extends AbstractTableModel {
 			return "Nom";
 
 		case 2:			
-			return "Prénom";
+			return "Prï¿½nom";
 
 		case 3:			
 			return "Groupe";
